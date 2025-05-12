@@ -1,0 +1,97 @@
+//antes
+public class Comment {
+    private final String author;
+    private final String content;
+
+    public Comment(String author, String content) {
+        this.author = author;
+        this.content = content;
+    }
+
+    public String getAuthor() { return author; }
+    public String getContent() { return content; }
+}
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Post {
+    private final String title;
+    private final String content;
+    private final List<Comment> comments = new ArrayList<>();
+
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public int countCommentsByAuthor(String author) {
+        int count = 0;
+        for (Comment c : comments) {
+            if (c.getAuthor().equalsIgnoreCase(author)) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+//depois
+public class Comment {
+    private final String author;
+    private final String content;
+
+    public Comment(String author, String content) {
+        this.author = author;
+        this.content = content;
+    }
+
+    public String getAuthor() { return author; }
+    public String getContent() { return content; }
+}
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Comments {
+    private final List<Comment> comments = new ArrayList<>();
+
+    public void add(Comment comment) {
+        if (comment == null) throw new IllegalArgumentException("Comment cannot be null");
+        comments.add(comment);
+    }
+
+    public void remove(Comment comment) {
+        comments.remove(comment);
+    }
+
+    public int countByAuthor(String author) {
+        return (int) comments.stream()
+            .filter(c -> c.getAuthor().equalsIgnoreCase(author))
+            .count();
+    }
+
+    public List<Comment> getAll() {
+        return Collections.unmodifiableList(comments);
+    }
+}
+
+public class Post {
+    private final String title;
+    private final String content;
+    private final Comments comments = new Comments();
+
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public Comments getComments() {
+        return comments;
+    }
+}
